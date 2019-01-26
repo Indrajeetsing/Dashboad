@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import { FilterRuleOptionPipe } from './filter-rule-option.pipe';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'my-app',
@@ -8,43 +9,52 @@ import { FilterRuleOptionPipe } from './filter-rule-option.pipe';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
-  ELEMENT_DATA = [
-   {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-   {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-   {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-   {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-   {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-   {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-   {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-   {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-   {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
- ];
+export class AppComponent implements OnInit{
 
+  constructor(private appService: AppService) {
 
- searchVariable: string;
+  }
 
- initialData = JSON.parse(JSON.stringify(this.ELEMENT_DATA));
+initialData: any = [];
+produces:any = [];
+ searchVariable: string = '';
+ loading = true;
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-    dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+  displayedColumns: string[] = ['name', 'category', 'brand', 'price per paund', 'available'];
+    dataSource = new MatTableDataSource();
+
+    ngOnInit() {
+      this.appService.getFilteredItems(this.searchVariable).subscribe(
+        (response: any) => {
+          console.log(response);
+          this.produces = response.produces;
+          this.dataSource = new MatTableDataSource(this.produces);
+          this.initialData = JSON.parse(JSON.stringify(this.produces));
+          this.loading = false;
+      }, (error: any) => {
+        this.loading = false;
+        console.log(error);
+      });
+    }
 
     applyFilter(filterValue: string) {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+      this.loading = true;
+      this.appService.getFilteredItems(filterValue).subscribe(
+        (response: any) => {
+        this.loading = false;
+        this.dataSource = response.produces;
+      }, (error: any) => {
+        this.loading = false;
+        console.log(error);
+      });
     }
 
 filterOptions(event) {
-  this.ELEMENT_DATA = new FilterRuleOptionPipe().transform(this.initialData, event.toLowerCase())
+  this.produces = new FilterRuleOptionPipe().transform(this.initialData, event.toLowerCase())
   this.applyFilter(event);
 }
 
 resetOptions() {
-  this.ELEMENT_DATA = this.initialData;
+  this.produces = this.initialData;
 }
-
-  save() {
-
-
-  }
 }

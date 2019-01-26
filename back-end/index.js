@@ -6,17 +6,28 @@ const app = express()
 // Morgan
 app.use(morgan('tiny'))
 
-
-var produces = [{position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-{position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-{position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-{position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-{position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-{position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-{position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-{position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-{position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-{position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'}];
+var produces = [
+  { 'name': 'Check print shirt', 'category': 'Cloths', 'brand': 'Peter England', 'price per paund': 35, 'available': 'yes'},
+  { 'name': 'Gloria logo sneaker', 'category': 'Shoes', 'brand': 'Gloria', 'price per paund': 55, 'available': 'yes'},
+  { 'name': 'Cate rigid bag', 'category': 'Luggage', 'brand': 'Travel Pro', 'price per paund': 125, 'available': 'no'},
+  { 'name': 'Wrist watch', 'category': 'Watches', 'brand': 'Fossil', 'price per paund': 135, 'available': 'yes'},
+  { 'name': 'Check print shirt', 'category': 'Cloths', 'brand': 'Peter England', 'price per paund': 35, 'available': 'yes'},
+  { 'name': 'Sport shoe', 'category': 'Shoes', 'brand': 'Adidas', 'price per paund': 55, 'available': 'no'},
+  { 'name': 'Cate rigid bag', 'category': 'Luggage', 'brand': 'Travel Pro', 'price per paund': 125, 'available': 'yes'},
+  { 'name': 'Wrist watch', 'category': 'Watches', 'brand': 'Police', 'price per paund': 135, 'available': 'no'},
+  { 'name': 'Suit', 'category': 'Cloths', 'brand': 'Wrangler', 'price per paund': 35, 'available': 'yes'},
+  { 'name': 'Black sneaker', 'category': 'Shoes', 'brand': 'Gloria', 'price per paund': 35, 'available': 'yes'},
+  { 'name': 'Cate rigid bag', 'category': 'Luggage', 'brand': 'Travel Pro', 'price per paund': 125, 'available': 'no'},
+  { 'name': 'Wrist watch', 'category': 'Watches', 'brand': 'Fossil', 'price per paund': 15, 'available': 'yes'},
+  { 'name': 'Sweater', 'category': 'Cloths', 'brand': 'Peter England', 'price per paund': 86, 'available': 'no'},
+  { 'name': 'Gloria logo sneaker', 'category': 'Shoes', 'brand': 'Nice', 'price per paund': 23, 'available': 'yes'},
+  { 'name': 'Cate rigid bag', 'category': 'Luggage', 'brand': 'Travel Pro', 'price per paund': 152, 'available': 'yes'},
+  { 'name': 'Wrist watch', 'category': 'Watches', 'brand': 'Casio', 'price per paund': 165, 'available': 'yes'},
+  { 'name': 'Printed shirt', 'category': 'Cloths', 'brand': 'Peter England', 'price per paund': 35, 'available': 'yes'},
+  { 'name': 'Formal Shoe', 'category': 'Shoes', 'brand': 'Gloria', 'price per paund': 55, 'available': 'no'},
+  { 'name': 'Office bag', 'category': 'Luggage', 'brand': 'Travel Pro', 'price per paund': 95, 'available': 'yes'},
+  { 'name': 'Smart watch', 'category': 'Watches', 'brand': 'Samsung', 'price per paund': 345, 'available': 'yes'},
+];
 
 function filterItems(query) {
   return produces.filter(function(produce) {
@@ -25,9 +36,14 @@ function filterItems(query) {
 }
 
 // search
-app.get('/search/:name', (req, res, next) => {
-  console.log(req);
-    return res.json({ message: filterItems(req.params.name) })
+app.get('/search', (req, res, next) => {
+  console.log(req.query.name);
+  if(req.query.name == '' || req.query.name == undefined) {
+    return res.status(200).send({ produces: produces});
+  } else {
+    return res.status(200).send({ produces: filterItems(req.query.name) });
+  }
+    // return res.json({ message: filterItems(req.params.name) })
 })
 // Starting server
 app.listen('8000')

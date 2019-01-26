@@ -1,20 +1,14 @@
   <mat-form-field>
     <input type="text" placeholder="Search" aria-label="Number" [(ngModel)]="searchVariable" matInput [matAutocomplete]="auto" (ngModelChange)="filterOptions($event)">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (close)="resetOptions()">
-      <mat-option *ngFor="let option of ELEMENT_DATA" [value]="option.name">
+      <mat-option *ngFor="let option of produces" [value]="option.name">
         {{option.name}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-  <!-- Position Column -->
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef> No. </th>
-    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-  </ng-container>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!loading">
 
   <!-- Name Column -->
   <ng-container matColumnDef="name">
@@ -23,17 +17,28 @@
   </ng-container>
 
   <!-- Weight Column -->
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef> Weight </th>
-    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+  <ng-container matColumnDef="category">
+    <th mat-header-cell *matHeaderCellDef> Category </th>
+    <td mat-cell *matCellDef="let element"> {{element.category}} </td>
   </ng-container>
 
   <!--  Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Symbol </th>
-    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+  <ng-container matColumnDef="brand">
+    <th mat-header-cell *matHeaderCellDef> Brand </th>
+    <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="price per paund">
+    <th mat-header-cell *matHeaderCellDef> Price </th>
+    <td mat-cell *matCellDef="let element"> {{element['price per paund']}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="available">
+    <th mat-header-cell *matHeaderCellDef> Available </th>
+    <td mat-cell *matCellDef="let element"> {{element.available}} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+<mat-spinner class="center" *ngIf="loading"></mat-spinner>
