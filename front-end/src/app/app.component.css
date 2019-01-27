@@ -1,13 +1,11 @@
-table {
-  width: 100%;
+.flex {
+  display: flex;
 }
 
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
+.justify-content-center {
+  justify-content: center;
 }
 
-.center {
-  margin-left: auto;
-  margin-right: auto;
+.mt-1 {
+  margin-top: 1rem;
 }

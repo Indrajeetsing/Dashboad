@@ -1,44 +1,65 @@
+<!-- serach box -->
+<div class="flex justify-content-center">
   <mat-form-field>
-    <input type="text" placeholder="Search" aria-label="Number" [(ngModel)]="searchVariable" matInput [matAutocomplete]="auto" (ngModelChange)="filterOptions($event)">
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (close)="resetOptions()">
+    <input [(ngModel)]="searchVariable" placeholder="Produce name" matInput [matAutocomplete]="auto" (ngModelChange)="filterOptions($event)">
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (close)="produces = initialData">
       <mat-option *ngFor="let option of produces" [value]="option.name">
         {{option.name}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+</div>
 
-
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!loading">
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!loading">
 
   <!-- Name Column -->
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
   </ng-container>
 
-  <!-- Weight Column -->
+  <!-- Category Column -->
   <ng-container matColumnDef="category">
-    <th mat-header-cell *matHeaderCellDef> Category </th>
-    <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+    <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.category}} </mat-cell>
   </ng-container>
 
-  <!--  Column -->
+  <!-- Brand Column -->
   <ng-container matColumnDef="brand">
-    <th mat-header-cell *matHeaderCellDef> Brand </th>
-    <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
+    <mat-header-cell *matHeaderCellDef> Brand </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.brand}} </mat-cell>
   </ng-container>
 
+  <!-- Price Column-->
   <ng-container matColumnDef="price per paund">
-    <th mat-header-cell *matHeaderCellDef> Price </th>
-    <td mat-cell *matCellDef="let element"> {{element['price per paund']}} </td>
+    <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['price per paund']}} </mat-cell>
   </ng-container>
 
+  <!-- Available Column -->
   <ng-container matColumnDef="available">
-    <th mat-header-cell *matHeaderCellDef> Available </th>
-    <td mat-cell *matCellDef="let element"> {{element.available}} </td>
+    <mat-header-cell *matHeaderCellDef> Available </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.available}} </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-<mat-spinner class="center" *ngIf="loading"></mat-spinner>
+  <!-- Location at store(Aisle Name) Column -->
+  <ng-container matColumnDef="aisle name">
+    <mat-header-cell *matHeaderCellDef> Location at store(Aisle Name) </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['location at store']['aisle name']}} </mat-cell>
+  </ng-container>
+
+  <!-- Table Header -->
+  <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+  <!-- Spinner -->
+<div class="flex justify-content-center mt-1" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+  <!-- No data found -->
+<div class="flex justify-content-center mt-1" *ngIf="dataSource.length == 0">
+  <label class="mat-h1">No Matching Data Found</label>
+</div>
